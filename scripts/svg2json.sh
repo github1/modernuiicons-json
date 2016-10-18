@@ -7,6 +7,6 @@ fi
 cd ./tmp/icons
 git pull
 cd -
-find ./tmp/icons/WindowsPhone/svg -name '*.svg' -print0 | xargs -0 -I{} -n 2  -P 4 sh -c 'echo Processing {};node ./scripts/svg2json.js {} > ./json/$(basename {} | tr "." "_" ).json'
+find ./tmp/icons/WindowsPhone/svg -name '*.svg' -exec  sh -c 'echo Processing {};node ./scripts/svg2json.js {} > ./json/$(basename {} | tr "." "_" ).json' \;
 
 
