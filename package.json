@@ -1,0 +1,14 @@
+{
+  "name": "modernuiicons-json",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "./scripts/svg2json.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/github1/modernuiicons-json.git"
+  },
+  "devDependencies": {
+    "htmlparser2": "^3.9.1"
+  }
+}
