@@ -1,7 +1,6 @@
 'use strict';
 
 const fs = require('fs'),
-    path = require('path'),
     htmlparser = require('htmlparser2'),
     svgFile = process.argv[2],
     camelCase = (prop) => {
@@ -16,7 +15,8 @@ const fs = require('fs'),
                 },
                 children = [];
             if (node.type === 'tag') {
-                container.root = true;
+                if (node.name === 'svg')
+                    container.root = [node.name, attrs, children];
                 if (typeof container.root === 'undefined')
                     return;
                 if (node.attribs) {
@@ -26,10 +26,31 @@ const fs = require('fs'),
                     }, attrs);
                 }
                 if (node.children) {
-                    node.children.forEach((n) => processNode(n, (child) => {
+                    node.children.forEach((n) => processNode(n, Object.assign((child) => {
                         children.push(child);
-                    }));
+                    }, {
+                        root: container.root
+                    })));
                 }
+                let maxX = 0,
+                    maxY = 0,
+                    minX = 99999,
+                    minY = 99999;
+                if(attrs.d) {
+                    attrs.d.split(/[\s]+/).forEach((part) => {
+                        let pair = part.split(/,/).map((value) => parseFloat(value));
+                        if (pair.length === 2) {
+                            maxX = Math.max(pair[0], maxX);
+                            maxY = Math.max(pair[1], maxY);
+                            minX = Math.min(pair[0], minX);
+                            minY = Math.min(pair[1], minY);
+                        }
+                    });
+                    attrs.viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+                }
+                delete attrs.width;
+                delete attrs.height;
+                delete attrs.enableBackground;
                 container([node.name, attrs, children]);
             }
         }
