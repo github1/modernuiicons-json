@@ -9,10 +9,7 @@ const fs = require('fs'),
         if (Array.isArray(node)) {
             node.forEach((n) => processNode(n, container));
         } else {
-            const attrs = {
-                    focusable: "false",
-                    unselectable: "false"
-                },
+            const attrs = {},
                 children = [];
             if (node.type === 'tag') {
                 if (node.name === 'svg')
@@ -46,11 +43,15 @@ const fs = require('fs'),
                             minY = Math.min(pair[1], minY);
                         }
                     });
-                    attrs.viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+                    container.root[1].viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
                 }
-                delete attrs.width;
-                delete attrs.height;
-                delete attrs.enableBackground;
+                if(node.name === 'svg') {
+                    delete attrs.width;
+                    delete attrs.height;
+                    delete attrs.enableBackground;
+                    attrs.focusable = 'false';
+                    attrs.unselectable = 'true';
+                }
                 container([node.name, attrs, children]);
             }
         }
