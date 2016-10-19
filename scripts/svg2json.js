@@ -1,16 +1,18 @@
 'use strict';
 
 const fs = require('fs'),
+    path = require('path'),
     htmlparser = require('htmlparser2'),
     svgFile = process.argv[2],
     camelCase = (prop) => {
         return prop.replace(/[-|:]([a-z])/gi, (val, match) => match.toUpperCase());
-    }, processNode = (node, container) => {
+    }, processNode = (node, container, iconId) => {
         if (Array.isArray(node)) {
-            node.forEach((n) => processNode(n, container));
+            node.forEach((n) => processNode(n, container, iconId));
         } else {
             const attrs = {},
                 children = [];
+            attrs['data-icon'] = iconId;
             if (node.type === 'tag') {
                 if (node.name === 'svg')
                     container.root = [node.name, attrs, children];
@@ -27,13 +29,13 @@ const fs = require('fs'),
                         children.push(child);
                     }, {
                         root: container.root
-                    })));
+                    })), iconId);
                 }
                 let maxX = 0,
                     maxY = 0,
                     minX = 99999,
                     minY = 99999;
-                if(attrs.d) {
+                if (attrs.d) {
                     attrs.d.split(/[\s]+/).forEach((part) => {
                         let pair = part.split(/,/).map((value) => parseFloat(value));
                         if (pair.length === 2) {
@@ -45,7 +47,7 @@ const fs = require('fs'),
                     });
                     container.root[1].viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
                 }
-                if(node.name === 'svg') {
+                if (node.name === 'svg') {
                     delete attrs.width;
                     delete attrs.height;
                     delete attrs.enableBackground;
@@ -65,6 +67,6 @@ if (typeof svgFile === 'undefined' || svgFile.trim() === '') {
 fs.readFile(svgFile, 'utf8', (err, data) => {
     processNode(htmlparser.parseDOM(data, {xmlMode: true}), (icon) => {
         console.log(JSON.stringify(icon));
-    });
+    }, path.basename(svgFile));
 });
 
