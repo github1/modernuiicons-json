@@ -50,12 +50,14 @@ const fs = require('fs'),
                     container.root[1].viewBoxTemp = adjustingViewBox;
                 }
                 if (node.name === 'svg') {
-                    attrs.viewBox = [
-                        attrs.viewBoxTemp.x1,
-                        attrs.viewBoxTemp.y1,
-                        attrs.viewBoxTemp.x2 - attrs.viewBoxTemp.x1,
-                        attrs.viewBoxTemp.y2 - attrs.viewBoxTemp.y1
-                    ].join(' ');
+                    if(attrs.viewBoxTemp) {
+                      attrs.viewBox = [
+                          attrs.viewBoxTemp.x1,
+                          attrs.viewBoxTemp.y1,
+                          attrs.viewBoxTemp.x2 - attrs.viewBoxTemp.x1,
+                          attrs.viewBoxTemp.y2 - attrs.viewBoxTemp.y1
+                      ].join(' ');
+                    }
                     attrs.focusable = 'false';
                     attrs.unselectable = 'true';
                     delete attrs.width;
