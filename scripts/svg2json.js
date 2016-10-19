@@ -31,28 +31,37 @@ const fs = require('fs'),
                         root: container.root
                     })), iconId);
                 }
-                let maxX = 0,
-                    maxY = 0,
-                    minX = 99999,
-                    minY = 99999;
+                let adjustingViewBox = container.root[1].viewBoxTemp || {
+                        x1: 999,
+                        y1: 999,
+                        x2: 0,
+                        y2: 0
+                    };
                 if (attrs.d) {
                     attrs.d.split(/[\s]+/).forEach((part) => {
                         let pair = part.split(/,/).map((value) => parseFloat(value));
                         if (pair.length === 2) {
-                            maxX = Math.max(pair[0], maxX);
-                            maxY = Math.max(pair[1], maxY);
-                            minX = Math.min(pair[0], minX);
-                            minY = Math.min(pair[1], minY);
+                            adjustingViewBox.x1 = Math.min(pair[0], adjustingViewBox.x1);
+                            adjustingViewBox.y1 = Math.min(pair[1], adjustingViewBox.y1);
+                            adjustingViewBox.x2 = Math.max(pair[0], adjustingViewBox.x2);
+                            adjustingViewBox.y2 = Math.max(pair[1], adjustingViewBox.y2);
                         }
-                    });
-                    container.root[1].viewBox = `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+                    }); //22.0 19.0 32.0 37.5
+                    container.root[1].viewBoxTemp = adjustingViewBox;
                 }
                 if (node.name === 'svg') {
+                    attrs.viewBox = [
+                        attrs.viewBoxTemp.x1,
+                        attrs.viewBoxTemp.y1,
+                        attrs.viewBoxTemp.x2 - attrs.viewBoxTemp.x1,
+                        attrs.viewBoxTemp.y2 - attrs.viewBoxTemp.y1
+                    ].join(' ');
+                    attrs.focusable = 'false';
+                    attrs.unselectable = 'true';
                     delete attrs.width;
                     delete attrs.height;
                     delete attrs.enableBackground;
-                    attrs.focusable = 'false';
-                    attrs.unselectable = 'true';
+                    delete attrs.viewBoxTemp;
                 }
                 container([node.name, attrs, children]);
             }
