@@ -1,7 +1,7 @@
 {
   "name": "modernuiicons-json",
   "description": "Provides json representations of the http://modernuiicons.com/ icon collection",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "scripts": {
     "build": "./scripts/svg2json.sh",
     "prepublishOnly": "npm run build && ./scripts/prepare.sh"
