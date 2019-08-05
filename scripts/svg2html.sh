@@ -1,9 +1,10 @@
 #!/usr/bin/env sh
 
-if [ ! -d "./tmp/icons" ]; then
-  git clone https://github.com/Templarian/WindowsIcons.git ./tmp/icons
+mkdir -p "./tmp"
+if [[ ! -d "./tmp/icons" ]]; then
+  git clone "https://github.com/Templarian/WindowsIcons.git" "./tmp/icons"
 fi
-cd ./tmp/icons
+cd "./tmp/icons"
 git pull
 cd -
 mkdir -p ./dist
@@ -12,5 +13,4 @@ for file in $(find ./tmp/icons/WindowsPhone/svg -name '*.svg' -print0|xargs -0 -
   output+="<tr><td>$(basename $file)</td><td>$(cat $file)</td></tr>"
 done
 output+='</table>'
-echo $output > ./dist/index.html
-
+echo ${output} > ./dist/index.html

@@ -1,7 +1,8 @@
 #!/usr/bin/env sh
 
-rm json/*.json
-if [ ! -d "./tmp/icons" ]; then
+mkdir -p ./json
+rm ./json/*.json
+if [[ ! -d "./tmp/icons" ]]; then
   git clone https://github.com/Templarian/WindowsIcons.git ./tmp/icons
 fi
 cd ./tmp/icons

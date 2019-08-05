@@ -1,14 +1,16 @@
 {
   "name": "modernuiicons-json",
-  "version": "1.0.0",
+  "description": "Provides json representations of the http://modernuiicons.com/ icon collection",
+  "public": true,
+  "version": "0.0.0",
   "scripts": {
-    "build": "./scripts/svg2json.sh"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/github1/modernuiicons-json.git"
+    "build": "./scripts/svg2json.sh",
+    "prepublishOnly": "npm run build && ./scripts/prepare.sh"
   },
   "devDependencies": {
     "htmlparser2": "^3.9.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
