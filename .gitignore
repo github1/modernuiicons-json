@@ -1,8 +1,10 @@
-.DS_Store
-.idea
 *.iml
-node_modules
-tmp/*
-dist/*
+.idea/
+coverage/
+.DS_Store
+node_modules/
+dist/
+.patches
+.eslintcache
 *.log
-coverage
+tmp/*
