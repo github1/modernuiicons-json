@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 mkdir -p "./tmp"
 if [[ ! -d "./tmp/icons" ]]; then

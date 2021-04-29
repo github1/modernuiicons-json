@@ -1,8 +1,8 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 rm -rf ./dist/json
 mkdir -p ./dist/json
-if [[ ! -d "./tmp/icons" ]]; then
+if [[ ! -d './tmp/icons' ]]; then
   git clone https://github.com/Templarian/WindowsIcons.git ./tmp/icons
 fi
 cd ./tmp/icons
